@@ -10,7 +10,13 @@ var Medico = require('../models/medico');
 // ==================================
 
 app.get('/', (req, res) => {
+
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
+
     Medico.find({})
+        .skip(desde)
+        .limit(5)
         .populate('hospital') // inner join tabla hospital
         .populate('usuario', 'nombre email') // inner join tabla usuario
         .exec((err, medicos) => {
@@ -21,9 +27,20 @@ app.get('/', (req, res) => {
                     errors: err
                 });
             }
-            res.status(200).json({
-                ok: true,
-                medicos
+
+            Medico.count({}, (err, conteo) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error conteo total medicos',
+                        errors: err
+                    });
+                }
+                res.status(200).json({
+                    ok: true,
+                    medicos,
+                    total: conteo
+                });
             });
         });
 });

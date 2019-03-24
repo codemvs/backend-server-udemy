@@ -14,24 +14,39 @@ var Usuario = require('../models/usuario');
 // Obtener todos los usuarios
 // ==================================
 app.get('/', (req, res, next) => {
+    var desde = req.query.desde || 0;
+    desde = Number(desde);
 
-    Usuario.find({}, 'nombre email img role').exec(
-        (err, usuarios) => {
-            if (err) {
-                return res.status(500).json({
-                    ok: false,
-                    mensaje: 'Error cargando usuarios',
-                    erros: err
-                }); // respuesta ok
+    Usuario.find({}, 'nombre email img role')
+        .skip(desde) // saltar 
+        .limit(5)
+        .exec(
+            (err, usuarios) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        mensaje: 'Error cargando usuarios',
+                        erros: err
+                    }); // respuesta ok
 
-            }
-            // Estado o código de la petición
-            res.status(200).json({
-                    ok: true,
-                    usuarios: usuarios
-                }) // respuesta ok
+                }
+                // Estado o código de la petición
+                Usuario.count({}, (err, conteo) => {
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            mensaje: 'Error conteo total usuarios',
+                            errors: err
+                        });
+                    }
+                    res.status(200).json({
+                        ok: true,
+                        usuarios: usuarios,
+                        total: conteo
+                    }); // respuesta ok
+                });
 
-        });
+            });
 });
 
 
