@@ -31,6 +31,10 @@ mongoose.connection.openUri('mongodb://localhost:27017/hospitalDB', (err, res) =
     console.log('Base de datos puerto 3000: \x1b[32m%s\x1b[0m', ' online');
 });
 
+// Server index config hacer carpeta upload publica
+// var serveIndex = require('serve-index');
+// app.use(express.static(__dirname + '/'))
+// app.use('/uploads', serveIndex(__dirname + '/uploads'));
 
 // Rutas
 app.use('/login', loginRoutes);
