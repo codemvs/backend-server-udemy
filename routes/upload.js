@@ -16,7 +16,8 @@ app.put('/:tipo/:id', (req, res, next) => {
     var tipo = req.params.tipo;
     var id = req.params.id;
     var tiposValidos = ['hospitales', 'medicos', 'usuarios'];
-
+    console.log("id, tipo", (id + ' ' + tipo));
+    console.log("Imagen", req.files);
     if (tiposValidos.indexOf(tipo) < 0) {
         return res.status(400).json({
             ok: false,
@@ -65,12 +66,6 @@ app.put('/:tipo/:id', (req, res, next) => {
         }
 
         subirPorTipo(tipo, id, nombreArchivo, res);
-
-        // res.status(200).json({
-        //     ok: true,
-        //     mensaje: 'Archivo movido',
-        //     extensionArchivo
-        // });
     });
 
 });
@@ -78,7 +73,7 @@ app.put('/:tipo/:id', (req, res, next) => {
 function subirPorTipo(tipo, id, nombreArchivo, res) {
     if (tipo === 'usuarios') {
         Usuario.findById(id, (err, usuario) => {
-
+            console.log(err, usuario);
             if (!usuario) {
                 return res.status(400).json({
                     ok: true,
