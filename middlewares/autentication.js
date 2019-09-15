@@ -32,12 +32,10 @@ exports.verificaADMIN_ROLE = function(req, res, next) {
         next();
         return false;
     }
-
     return res.status(401).json({
         ok: false,
         mensaje: 'Acción denegada',
         errors: {mensaje: 'Se requiere de un usuario administrador para esta acción'}
-    })
-    
+    });   
 
 }
